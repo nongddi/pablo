@@ -1,8 +1,10 @@
 #%%
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from bs4 import BeautifulSoup as bs
 import time
+
+#%%
+data_dict = {'Title': [], 'Main Text': [], 'User': []}
 
 #%%
 driver = webdriver.Chrome('C:/Users/segre/Desktop/project/pablo/chromedriver_win32/chromedriver.exe')
@@ -19,11 +21,16 @@ time.sleep(2)
 
 driver.find_element(by=By.XPATH, value='//*[@id="main-area"]/div[4]/table/tbody/tr[12]/td[1]/div[2]/div/a[1]').click()
 headline = driver.find_element(by=By.CLASS_NAME, value='title_text').text
+main_text = driver.find_elements(by=By.TAG_NAME, value='p')
+user = driver.find_element(by=By.CLASS_NAME, value='user').text
 
-soup = bs(driver.page_source, 'html.parser')
-soup_test = soup.select_one('#SE-4028d251-3689-47a0-9f74-a2f59d2a0fea').get_text()
-print(headline)
-print(soup_test)
+data_dict['Title'].append(headline)
+data_dict['User'].append(user)
+for i in range(0, len(main_text)):
+    if main_text[i].text != '':
+        data_dict['Main Text'].append(main_text[i].text)
+
+print(data_dict)
 # %%
 driver.quit()
 #%%
